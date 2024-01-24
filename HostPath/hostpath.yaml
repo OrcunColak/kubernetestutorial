@@ -1,0 +1,19 @@
+# https://weng-albert.medium.com/local-volume-vs-hostpath-en-8c214c1dca74
+# kubectl apply -f hostpath.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath-example
+spec:
+  containers:
+    - name: hostpath-container
+      image: nginx
+      volumeMounts:
+        - name: hostpath-volume
+          mountPath: /var/www/html
+  volumes:
+    - name: hostpath-volume
+      hostPath:
+        # Path must be absolute path on host
+        path: D:\absolute\path\on\host
+        type: Directory
