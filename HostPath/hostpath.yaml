@@ -14,6 +14,6 @@ spec:
   volumes:
     - name: hostpath-volume
       hostPath:
-        # Path must be absolute path on host
-        path: D:\absolute\path\on\host
-        type: Directory
+        # To mount volumes using Kubernetes on Docker Desktop for Windows the path will be
+        path: /run/desktop/mnt/host/d/myvolume
+        type: DirectoryOrCreate
