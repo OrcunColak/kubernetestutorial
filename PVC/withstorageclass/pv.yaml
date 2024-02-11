@@ -1,0 +1,16 @@
+# pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    # To mount volumes using Kubernetes on Docker Desktop for Windows the path will be
+    path: /run/desktop/mnt/host/d/myvolume
+    # Automatically creates the directory
+    type: DirectoryOrCreate

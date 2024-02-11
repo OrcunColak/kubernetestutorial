@@ -11,6 +11,7 @@ spec:
   hostPath:
     # To mount volumes using Kubernetes on Docker Desktop for Windows the path will be
     path: /run/desktop/mnt/host/d/myvolume
+    # Automatically creates the directory
     type: DirectoryOrCreate
   claimRef:
     namespace: default

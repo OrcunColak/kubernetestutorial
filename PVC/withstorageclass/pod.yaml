@@ -1,0 +1,16 @@
+# pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-pod
+spec:
+  containers:
+    - name: example-container
+      image: nginx
+      volumeMounts:
+        - name: storage
+          mountPath: /var/www/html
+  volumes:
+    - name: storage
+      persistentVolumeClaim:
+        claimName: example-pvc
