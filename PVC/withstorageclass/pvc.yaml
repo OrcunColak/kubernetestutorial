@@ -8,6 +8,11 @@ spec:
   accessModes:
     - ReadWriteOnce
   resources:
+    # Does not work on hostpath
+    # See https://stackoverflow.com/questions/59915899/limit-persistent-volume-claim-content-folder-size-using-hostpath
     requests:
-      storage: 10Mi
+      storage: 10Mi  # Minimum required storage
+    limits:
+      storage: 20Mi  # Maximum allowed storage
+      
 

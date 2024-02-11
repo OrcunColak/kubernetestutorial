@@ -1,0 +1,4 @@
+On Pod
+cd /var/www/html
+dd if=/dev/zero of=largefile.txt bs=1M count=21
+Does not work on hostpath
