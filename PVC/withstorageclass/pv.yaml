@@ -7,6 +7,10 @@ spec:
   storageClassName: manual
   capacity:
     storage: 100Mi
+  # This PV is intended for file-based storage.
+  volumeMode: Filesystem
+  # “Retain” means that the PV’s data is retained even if the associated PVC is deleted, and manual cleanup is required.
+  persistentVolumeReclaimPolicy: Retain
   accessModes:
     - ReadWriteOnce
   hostPath:
