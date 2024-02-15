@@ -29,7 +29,7 @@ metadata:
   labels:
     app: nginx-label  # Label for easy undeploy
 spec:
-  type: LoadBalancer
+  type: LoadBalancer # type: NodePort does not work on Docker Desktop
   ports:
     - name: http
       port: 8080 # The port exposed by the service
