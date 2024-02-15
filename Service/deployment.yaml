@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-project
+  labels:
+    app: nginx-label  # Label for easy undeploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-project # Labels used to select pods by the Deployment
+  template:
+    metadata:
+      labels:
+        app: nginx-project # Label applied to pods
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-project
+  labels:
+    app: nginx-label  # Label for easy undeploy
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 8080 # The port exposed by the service
+      protocol: TCP
+      targetPort: 80 # Internal port
+  selector:
+    app: nginx-project # Forward requests to pods with label of this value
