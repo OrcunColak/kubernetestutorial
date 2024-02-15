@@ -1,0 +1,17 @@
+# See https://medium.com/@danielepolencic/kubernetes-challenge-2-waiting-for-a-miracle-f8448c864397
+# After the SIGTERM signal wait
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: web
+      image: nginx
+      ports:
+        - name: web
+          containerPort: 80
+      lifecycle:
+        preStop:
+          exec:
+            command: [ "sleep", "15" ]
