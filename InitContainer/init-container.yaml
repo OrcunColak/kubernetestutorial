@@ -1,0 +1,22 @@
+# https://adil.medium.com/kubernetes-core-concepts-init-containers-3d5622a85d37
+# To open shell
+#  kubectl exec -it busybox -- sh
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+  containers:
+    - name: busybox
+      image: k8s.gcr.io/busybox
+      command: [ "/bin/sh", "-c", "tail -f /dev/null" ]
+  restartPolicy: Never
+  initContainers:
+    - name: sleep
+      image: busybox
+      command: [ 'sh' ]
+      args:
+        - -c
+        - >-
+          sleep 3
+    
