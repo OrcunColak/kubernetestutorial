@@ -1,0 +1,25 @@
+# https://medium.com/@mohamed.benhassine/how-to-create-kubernetes-scheduled-tasks-with-java-f90834fc4984
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-job
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Allow
+  suspend: false
+  successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 60
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cleanup-job
+              image: busybox
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/rm
+                - -f
+                - /tmp/*
+          restartPolicy: OnFailure

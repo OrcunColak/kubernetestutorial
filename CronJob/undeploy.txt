@@ -1,0 +1,2 @@
+kubectl get cronjobs
+kubectl delete cronjob cleanup-job
