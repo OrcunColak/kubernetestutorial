@@ -1,0 +1,1 @@
+kubectl delete deployment,service -l app=mysql-label
