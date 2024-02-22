@@ -1,6 +1,7 @@
 # https://adil.medium.com/kubernetes-core-concepts-init-containers-3d5622a85d37
 # To open shell
-#  kubectl exec -it busybox -- sh
+# kubectl apply -f init-container.yaml
+# kubectl exec -it busybox -- sh
 apiVersion: v1
 kind: Pod
 metadata:
