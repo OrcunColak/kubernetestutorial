@@ -1,5 +1,5 @@
 # See https://medium.com/@danielepolencic/kubernetes-challenge-2-waiting-for-a-miracle-f8448c864397
-# After the SIGTERM signal wait
+# After the SIGTERM signal wait for kubernetes components to finally remove the endpoint
 apiVersion: v1
 kind: Pod
 metadata:
@@ -14,4 +14,4 @@ spec:
       lifecycle:
         preStop:
           exec:
-            command: [ "sleep", "15" ]
+            command: [ "sleep", "50" ]

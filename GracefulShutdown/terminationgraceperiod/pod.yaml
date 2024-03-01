@@ -1,0 +1,16 @@
+# See https://adil.medium.com/how-to-gracefully-and-faster-shutdown-a-pod-in-kubernetes-5b1fa15448ff
+# After the SIGTERM signal in some cases, it may be necessary to take additional actions to terminate the program without any problems
+# Kubernetes waits for 30 seconds by default
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  terminationGracePeriodSeconds: 15
+  containers:
+    - name: web
+      image: nginx
+      ports:
+        - name: web
+          containerPort: 80
+      
