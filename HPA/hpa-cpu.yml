@@ -1,0 +1,33 @@
+# See https://overcast.blog/13-ways-to-optimize-kubernetes-horizontal-pod-autoscaler-bd5911683bb2
+# See https://kamsjec.medium.com/hpa-vs-vpa-9b7cb0c71dbd
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app-deployment
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+  targetCPUUtilizationPercentage: 50  # Default target if not specified in metrics
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 10
+    scaleDown:
+      stabilizationWindowSeconds: 180
+      policies:
+        - type: Percent
+          value: 10

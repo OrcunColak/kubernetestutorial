@@ -1,0 +1,30 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app-deployment
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Pods
+      pods:
+        metricName: http_request_duration_seconds
+        target:
+          type: Value
+          averageValue: 0.2  # Represents 200 milliseconds in seconds
+          # averageValue: 200ms
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 10
+    scaleDown:
+      stabilizationWindowSeconds: 180
+      policies:
+        - type: Percent
+          value: 10
