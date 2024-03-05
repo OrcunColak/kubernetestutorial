@@ -1,0 +1,1 @@
+kubectl delete -f init-container-db.yaml
