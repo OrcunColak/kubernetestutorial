@@ -1,3 +1,4 @@
+# Bu örnek çalışmıyor
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,23 +9,6 @@ data:
   POSTGRES_DB: db
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: postgres-init-script
-data:
-  init.sql: |
-    CREATE TABLE employees (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(100),
-        salary DECIMAL(10, 2)
-    );
-    
-    INSERT INTO employees (name, salary) VALUES
-        ('John Doe', 50000.00),
-        ('Jane Doe', 60000.00),
-        ('Alice Johnson', 75000.00);
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -42,10 +26,18 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: 'postgres'
+          image: 'postgres:latest'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-secret
+      initContainers:
+        - name: check-db-ready
+          image: 'postgres:latest'
+          imagePullPolicy: IfNotPresent
+          command: [ 'sh', '-c', 'until pg_isready -h postgres -p 5432; do echo waiting for database; sleep 2; done;' ]
           envFrom:
             - configMapRef:
                 name: postgres-secret
