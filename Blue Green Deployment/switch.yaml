@@ -1,0 +1,16 @@
+# kubectl apply -f switch-service.yaml
+
+# switch-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: your-app-service
+  namespace: default
+spec:
+  selector:
+    app: your-app
+    env: blue  # Change this to "green" to switch to the green version
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

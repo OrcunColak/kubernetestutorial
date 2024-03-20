@@ -1,0 +1,42 @@
+# See https://medium.com/@lfoster49203/implementing-blue-green-deployments-with-kubernetes-f54c589f8852
+# kubectl create namespace blue
+
+# blue-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-deployment
+  namespace: blue
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: your-app
+      env: blue
+  template:
+    metadata:
+      labels:
+        app: your-app
+        env: blue
+    spec:
+      containers:
+        - name: your-app
+          image: your-container-image:blue
+          ports:
+            - containerPort: 80
+
+---
+# blue-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: your-app-service
+  namespace: blue
+spec:
+  selector:
+    app: your-app
+    env: blue
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

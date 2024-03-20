@@ -1,0 +1,41 @@
+# See https://medium.com/@lfoster49203/implementing-blue-green-deployments-with-kubernetes-f54c589f8852
+
+# green-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: green-deployment
+  namespace: green
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: your-app
+      env: green
+  template:
+    metadata:
+      labels:
+        app: your-app
+        env: green
+    spec:
+      containers:
+        - name: your-app
+          image: your-container-image:green
+          ports:
+            - containerPort: 80
+
+---
+# green-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: your-app-service
+  namespace: green
+spec:
+  selector:
+    app: your-app
+    env: green
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
