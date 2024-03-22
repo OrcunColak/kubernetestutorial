@@ -1,0 +1,10 @@
+# See https://ashishnoob.medium.com/configuring-spring-boot-applications-in-kubernetes-e9d6da1c6a3b
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  application.properties: |
+    spring.datasource.url=jdbc:mysql://msql-prod:3306/dbname
+    spring.datasource.username=dbusername
+    spring.datasource.password=FancyPassword
