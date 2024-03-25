@@ -1,0 +1,25 @@
+# See https://medium.com/@manojkumar_41904/understanding-and-verifying-volume-mounts-in-kubernetes-pods-with-configmap-13ac8d60805a
+# We can see a /data/metadata.db file on the pod
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-configmap
+data:
+  metadata.db: |-
+    /directorypath/metadata.db
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: your-image:tag
+      volumeMounts:
+        - name: config-volume
+          mountPath: /data
+  volumes:
+    - name: config-volume
+      configMap:
+        name: my-configmap
