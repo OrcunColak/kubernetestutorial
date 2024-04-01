@@ -1,0 +1,13 @@
+# See https://medium.com/@manojkumar_41904/demystifying-service-discovery-and-load-balancing-in-kubernetes-unraveling-the-magic-of-scalable-5d3b8c0c7f11
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app
+spec:
+  selector:
+    app: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: NodePort
