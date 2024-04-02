@@ -1,0 +1,12 @@
+# See https://overcast.blog/kubernetes-garbage-collection-a-practical-guide-22a5c7125257
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: example-quota
+  namespace: example-namespace
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
