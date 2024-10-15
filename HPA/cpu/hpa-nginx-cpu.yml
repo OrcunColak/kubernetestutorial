@@ -1,0 +1,71 @@
+# deploy with
+# kubectl apply -f hpa-nginx-cpu.yml
+
+# Verify with
+# kubectl get hpa nginx-hpa
+
+# undeploy with
+# kubectl delete deployment nginx-deployment
+# kubectl delete service nginx-service
+# kubectl delete hpa nginx-hpa
+# kubectl delete pod load-generator
+
+# Generate load test
+# kubectl run -i --tty load-generator --image=busybox /bin/sh
+# once inside the container, generate load
+# while true; do wget -q -O- http://nginx-service.default.svc.cluster.local; done
+
+# Check pods
+# kubectl get pods -l app=nginx
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1 # Start with one pod
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx-deployment
+  minReplicas: 1 # Keep at least one pod
+  maxReplicas: 5 # Max pods can scale up to 5
+  targetCPUUtilizationPercentage: 50
