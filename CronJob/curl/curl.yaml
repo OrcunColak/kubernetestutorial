@@ -1,0 +1,20 @@
+# See https://jadhavsaurabh037.medium.com/simplifying-cronjobs-for-distributed-spring-boot-applications-using-kubernetes-99064a81afef
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cronjob-test
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hello
+              image: busybox:1.28
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - curl -X POST http://example.com/cronjob
+          restartPolicy: OnFailure
