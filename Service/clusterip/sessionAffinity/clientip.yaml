@@ -14,4 +14,5 @@ spec:
   # In this example, the service my-app is configured with session affinity based on client IP addresses. It directs traffic to the pod with the fewest active connections, improving responsiveness.
   sessionAffinity: ClientIP
   # This example creates a ClusterIP service named my-app, distributing incoming requests among the pods with the app: MyApp label in a round-robin fashion.
+  # ClusterIP is the default service of Kubernetes if no service type has been defined explicitly. It allows communication between services within same cluster.
   type: ClusterIP

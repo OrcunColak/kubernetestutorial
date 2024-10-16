@@ -53,6 +53,8 @@ spec:
   selector:
     app: nginx
     testService: service-1
+  # NodePort provides a way to expose a group of Pods to the outside world. It exposes a port in each Node.
+  # When a NodePort is created, kube-proxy exposes a port in the range 30000–32767.
   type: NodePort
   ports:
     - name: http
