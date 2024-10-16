@@ -10,6 +10,7 @@
 # kubectl delete ingress nginx-ingress
 # kubectl delete deployment nginx-deployment
 # kubectl delete service nginx-service
+# kubectl delete networkpolicy allow-nginx-traffic
 
 apiVersion: apps/v1
 kind: Deployment
