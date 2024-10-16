@@ -3,7 +3,13 @@
 
 # kubectl apply -f nginx-ingress.yaml
 
-# kubectl get pods -n ingress-nginx -w
+# kubectl get pods -n ingress-nginx
+
+# Undeploy
+# kubectl delete ingress nginx-ingress
+# kubectl delete deployment nginx-deployment
+# kubectl delete service nginx-service
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
