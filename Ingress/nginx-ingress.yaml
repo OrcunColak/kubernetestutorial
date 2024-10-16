@@ -1,6 +1,9 @@
 # Install ingress
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
 
+# Uninstall ingress
+# kubectl delete namespace ingress-nginx
+
 # kubectl apply -f nginx-ingress.yaml
 
 # kubectl get pods -n ingress-nginx
