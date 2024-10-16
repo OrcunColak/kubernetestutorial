@@ -4,6 +4,7 @@
 # kubectl apply -f nginx-ingress.yaml
 
 # kubectl get pods -n ingress-nginx
+# kubectl get networkpolicy
 
 # Undeploy
 # kubectl delete ingress nginx-ingress
@@ -62,4 +63,29 @@ spec:
                 name: nginx-service
                 port:
                   number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-nginx-traffic
+  namespace: default  # Change this if your Nginx service is in another namespace
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx  # This should match the label of your Nginx pods
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector: {}  # Allows traffic from any pod within the same namespace
+      ports:
+        - protocol: TCP
+          port: 80
+  egress:
+    - to:
+        - podSelector: {}  # Allows traffic to any pod within the same namespace
+      ports:
+        - protocol: TCP
+          port: 80
 
