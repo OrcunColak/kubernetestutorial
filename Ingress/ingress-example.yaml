@@ -1,0 +1,27 @@
+# See https://dejanualex.medium.com/ingress-in-one-minute-7fad701503f6
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /python
+            pathType: Prefix
+            backend:
+              service:
+                name: pythonapp-svc
+                port:
+                  number: 8081
+          - path: /go
+            pathType: Prefix
+            backend:
+              service:
+                name: goapp-svc
+                port:
+                  number: 8082
