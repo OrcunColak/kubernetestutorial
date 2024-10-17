@@ -1,0 +1,10 @@
+# See https://overcast.blog/5-advanced-techniques-for-kubernetes-autoscaler-optimization-3ef351f487f8
+# Implementing priority-based autoscaling involves assigning priorities to different workloads and ensuring that critical applications
+# are scaled preferentially. This approach helps in resource allocation according to the business importance of each application.
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+globalDefault: false
+description: "This priority class should be used for XYZ service pods only."

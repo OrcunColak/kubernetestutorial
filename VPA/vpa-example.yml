@@ -1,0 +1,22 @@
+# See https://overcast.blog/5-advanced-techniques-for-kubernetes-autoscaler-optimization-3ef351f487f8
+
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: your-vpa
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind:       Deployment
+    name:       your-deployment
+  updatePolicy:
+    updateMode: "Off"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: your-container
+        minAllowed:
+          cpu: "250m"
+          memory: "500Mi"
+        maxAllowed:
+          cpu: "1"
+          memory: "1Gi"
