@@ -1,0 +1,21 @@
+# See https://overcast.blog/24-kubernetes-mastersconfigurations-29235c65b337
+# Network policies specify how groups of pods are allowed to communicate with each other and other network endpoints,
+# enhancing cluster security by enforcing a whitelist approach to network traffic.
+
+# Allows pods with the role: backend label to communicate with pods labeled role: database over TCP port 5432.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-access-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: database
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: backend
+      ports:
+        - protocol: TCP
+          port: 5432

@@ -1,0 +1,11 @@
+# See https://overcast.blog/24-kubernetes-mastersconfigurations-29235c65b337
+# Kubernetes volume snapshotting allows you to capture the state of a PersistentVolume at a specific point in time,
+# facilitating backup and recovery processes for stateful applications.
+apiVersion: snapshot.storage.k8s.io/v1beta1
+kind: VolumeSnapshot
+metadata:
+  name: my-volume-snapshot
+spec:
+  volumeSnapshotClassName: my-snapshot-class
+  source:
+    persistentVolumeClaimName: my-pvc

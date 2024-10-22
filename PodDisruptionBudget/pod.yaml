@@ -1,0 +1,18 @@
+# See https://overcast.blog/24-kubernetes-mastersconfigurations-29235c65b337
+# Pod Disruption Budgets (PDB) protect against involuntary disruptions that could cause too many simultaneously unavailable pods within an application.
+
+# What It Does: Ensures at least two pods of my-app are always available during voluntary disruptions like node maintenance.
+
+# Example Use-Case: Protecting a front-end application serving live traffic from going completely offline during maintenance.
+
+# Best Practices: Set minAvailable or maxUnavailable appropriately based on your application's tolerance for downtime.
+
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: my-app-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: my-app
