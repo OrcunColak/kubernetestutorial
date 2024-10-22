@@ -1,0 +1,29 @@
+# This configuration injects the contents of app-config into the pod, allowing the application to read its configuration from /etc/config/config.json.
+# ConfigMap Example
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  config.json: |
+    {
+      "key": "value",
+      "databaseURL": "http://mydatabase.example.com"
+    }
+---
+# Pod Spec using ConfigMap
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+    - name: myapp-container
+      image: myapp
+      volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: app-config

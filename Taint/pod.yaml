@@ -1,0 +1,18 @@
+# See https://overcast.blog/13-kubernetes-tricks-you-didnt-know-647de6364472
+# Applying a taint to a node
+kubectl taint nodes node1 key=value:NoSchedule
+
+# Pod specification with toleration
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: mypod
+      image: nginx
+  tolerations:
+    - key: "key"
+      operator: "Equal"
+      value: "value"
+      effect: "NoSchedule"
