@@ -1,0 +1,14 @@
+# See https://overcast.blog/13-kubernetes-tricks-you-didnt-know-647de6364472
+# This example uses an init container to wait until a service named myservice is available before starting the main application container.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+    - name: myapp-container
+      image: myapp
+  initContainers:
+    - name: init-myservice
+      image: busybox
+      command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']

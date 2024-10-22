@@ -1,0 +1,19 @@
+# See https://overcast.blog/13-kubernetes-tricks-you-didnt-know-647de6364472
+# This pod will only be scheduled on nodes with the label disktype=ssd.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: with-node-affinity
+spec:
+  containers:
+    - name: with-node-affinity
+      image: nginx
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                  - ssd
