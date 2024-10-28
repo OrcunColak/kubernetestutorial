@@ -1,0 +1,57 @@
+# See https://itnext.io/understanding-kubernetes-volume-snapshots-965de50870eb
+# $kubectl apply -f RestorePersistentVolumeClaim.yaml
+#persistentvolumeclaim/mariadb-restore created
+#
+# $kubectl apply -f RestoreDeployment.yaml
+#deployment.apps/mariadb-restore created
+---
+# RestorePersistentVolumeClaim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-restore
+spec:
+  dataSource:
+    name: mariadb-snapshot
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+# RestoreDeployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-restore
+spec:
+  selector:
+    matchLabels:
+      app: mariadb-restore
+  template:
+    metadata:
+      labels:
+        app: mariadb-restore
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:11
+          resources:
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-root-password
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts:
+            - name: mariadb-restore-pv
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mariadb-restore-pv
+          persistentVolumeClaim:
+            claimName: mariadb-restore

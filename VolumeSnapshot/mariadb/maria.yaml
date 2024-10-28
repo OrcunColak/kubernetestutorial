@@ -1,0 +1,65 @@
+# See https://itnext.io/understanding-kubernetes-volume-snapshots-965de50870eb
+# $kubectl apply -f PersistentVolumeClaim.yaml
+#persistentvolumeclaim/mariadb-pvc created
+#
+# $kubectl apply -f Secret.yaml
+#secret/mysql-root-password created
+#
+# $kubectl apply -f StatefulSet.yaml
+#statefulset.apps/mariadb created
+
+---
+# PersistentVolumeClaim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-root-password
+data:
+  MYSQL_ROOT_PASSWORD: cGFzc3dvcmQ=
+type: Opaque
+---
+# StatefulSet.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb
+spec:
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:11
+          resources:
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-root-password
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts:
+            - name: mariadb-pv
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mariadb-pv
+          persistentVolumeClaim:
+            claimName: mariadb-pvc

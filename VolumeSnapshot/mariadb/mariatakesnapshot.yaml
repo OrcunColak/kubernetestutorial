@@ -1,0 +1,13 @@
+# See https://itnext.io/understanding-kubernetes-volume-snapshots-965de50870eb
+# $kubectl apply -f VolumeSnapshot.yaml
+#volumesnapshot.snapshot.storage.k8s.io/mariadb-snapshot created
+---
+# VolumeSnapshot.yaml
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:
+  name: mariadb-snapshot
+spec:
+  volumeSnapshotClassName: do-block-storage
+  source:
+    persistentVolumeClaimName: mariadb-pvc
