@@ -1,0 +1,38 @@
+#This Yaml will spin a nginx main container and a busybox sidecontainer
+#Sidecontainer writes to a file which is loaded by nsginx main container
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: httpGetHook
+spec:
+  containers:
+    - image: nginx
+      name: main-container
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: var-log
+          mountPath: /usr/share/nginx/html
+    - image: busybox
+      name: sidecar
+      imagePullPolicy: "IfNotPresent"
+      command: ["/bin/sh", "-c"]
+      args:
+        - echo hello from sidecar >> /var/log/index.html;
+          sleep 60;
+          echo done >> /var/log/index.html;
+      lifecycle:
+        postStart:
+          httpGet:
+            host: localhost
+            port: 80
+            path: /
+            scheme: HTTP
+      volumeMounts:
+        - name: var-log
+          mountPath: /var/log
+  volumes:
+    - name: var-log
+      emptyDir: {}

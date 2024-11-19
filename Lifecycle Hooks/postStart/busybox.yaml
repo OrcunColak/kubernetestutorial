@@ -1,0 +1,31 @@
+# See https://faun.pub/kubernetes-lifecycle-hooks-12e71b3b4a33
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hookdemo
+spec:
+  containers:
+    - name: lifecycle-hook
+      image: busybox
+      imagePullPolicy: "IfNotPresent"
+      command: ["/bin/sh", "-c"]
+      args:
+        - echo hello from busybox;
+          sleep 5;
+          echo done;
+      lifecycle:
+        postStart:
+          exec:
+            command: ["/bin/sh", "-c", "echo Hello from the postStart handler  `date` >> /var/log/message.log"]
+        preStop:
+          exec:
+            command: ["/bin/sh", "-c", "echo Hello from the preStop handler >> /var/log/message.log"]
+      volumeMounts:
+        - name: log
+          mountPath: /var/log
+  restartPolicy: "Never"
+  volumes:
+    - name: log
+      hostPath:
+        path: /data/
+        type: "Directory"
