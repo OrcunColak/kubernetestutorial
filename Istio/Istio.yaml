@@ -1,0 +1,113 @@
+# See https://medium.com/@khanjani.hamid/implementing-istio-in-spring-boot-microservices-on-kubernetes-4b770f44617a
+
+# Istio’s sidecar injection enabled.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: product-service
+          image: your-docker-repo/product-service:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+  ports:
+    - port: 8080
+      name: http
+  selector:
+    app: product-service
+---
+# Creating an Istio Gateway and VirtualService
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: product-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: product-service
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - product-gateway
+  http:
+    - match:
+        - uri:
+            prefix: "/api/products"
+      route:
+        - destination:
+            host: product-service
+            port:
+              number: 8080
+---
+# Canary Deployment. We implement a canary release, where 90% of the traffic goes to version v1 and 10% to version v2.
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: product-service-canary
+spec:
+  hosts:
+    - "product-service"
+  http:
+    - route:
+        - destination:
+            host: product-service
+            subset: v1
+          weight: 90
+        - destination:
+            host: product-service
+            subset: v2
+          weight: 10
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: product-service-destination
+spec:
+  host: product-service
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
+---
+# Enforcing Security with mTLS
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: default
+spec:
+  mtls:
+    mode: STRICT
