@@ -1,0 +1,21 @@
+# See https://boottechnologies-ci.medium.com/lab7-spring-boot-k8s-spring-batch-on-kubernetes-jobs-and-cronjobs-d75344fec5af
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello-cronjob
+spec:
+  # run the job every minute
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hello
+              image: busybox:1.28
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - date; echo Hello from the Kubernetes cluster
+          restartPolicy: OnFailure
