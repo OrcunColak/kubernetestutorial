@@ -15,13 +15,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: pythonapp-svc
+                name: pythonapp-svc # Name of service
                 port:
                   number: 8081
           - path: /go
             pathType: Prefix
             backend:
               service:
-                name: goapp-svc
+                name: goapp-svc # Name of service
                 port:
                   number: 8082
