@@ -1,0 +1,13 @@
+# See https://medium.com/@disha.20.10/kubernetes-traffic-management-combining-gateway-api-with-service-mesh-for-north-south-and-63e39ad95dcc
+# This will create a new Kubernetes cluster named my-cluster using the configuration we defined.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: my-cluster
+nodes:
+  - role: control-plane
+  - role: worker
+    labels:
+      name: "worker-1"
+  - role: worker
+    labels:
+      name: "worker-2"
